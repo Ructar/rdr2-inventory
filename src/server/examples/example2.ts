@@ -1,6 +1,45 @@
-import { Item } from "../server/Item"
+class Item {
+	private id: number
+	private name: string
+	private quantity: number = 0
+	private attributes: {[k: string]: any} = {}
 
-let Items: [
+    constructor(id: number, name: string, attributes: {}) {
+        this.id = id;
+        this.name = name;
+        this.attributes = attributes;
+    }
+
+    setQuantity(quantity: number) {
+        this.quantity = quantity;
+    }
+
+    addQuantity(quantity: number) {
+        this.quantity = this.quantity + quantity;
+    }
+
+    removeQuantity(quantity: number) {
+        this.quantity = this.quantity - quantity;
+    }
+
+    addAttribute(name: string, data: {}) {
+        this.attributes[name] = data
+    }
+
+    getQuantity() {
+        return this.quantity;
+    }
+
+    getId() {
+        return this.id;
+    }
+
+    getName() {
+        return this.name;
+    }
+}
+
+let Items = [
 	{id: 0, "name": "Lasso", "attributes": {"description": ""}},
 	{id: 1, "name": "Fishing Rod", "attributes": {"description": ""}},
 	{id: 2, "name": "Electric Lantern", "attributes": {"description": ""}},
@@ -228,10 +267,8 @@ let Items: [
 	{id: 224, "name": "Platinum Chain Necklace", "attributes": {"description": "Sell"}},
 	{id: 225, "name": "Platinum Engraved Buckle", "attributes": {"description": "Sell"}},
 	{id: 226, "name": "Silver Clamp Buckle", "attributes": {"description": "Sell"}},
-	{id: 227, "name": "Silver Earring	Sell", "attributes": {"description": ""}},
-	{id: 228, "name": "Silver Emblem Ring	Sell", "attributes": {"description": ""}},
-
-
+	{id: 227, "name": "Silver Earring", "attributes": {"description": ""}},
+	{id: 228, "name": "Silver Emblem Ring", "attributes": {"description": ""}},
 ]
 
 let ItemObjects: Item[] = []
@@ -243,10 +280,4 @@ function createItems() {
     console.log(ItemObjects)
 }
 
-onNet("onResourceStart", (resource) => {
-	if ( resource === GetCurrentResourceName()) {
-		createItems()
-	}
-})
-
-export { Items, ItemObjects }
+createItems()
