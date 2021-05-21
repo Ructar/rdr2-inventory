@@ -1,4 +1,4 @@
-class Item {
+/* class Item {
 	private id: number
 	private name: string
 	private quantity: number
@@ -96,4 +96,4 @@ const Account = new BankAccount(1, {}, 100000, Inventory)
 console.log(Account)
 Account.withdrawItem(1, 20)
 Account.withdrawItem(2, 1000)
-console.log(Account)
+console.log(Account) */

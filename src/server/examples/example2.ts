@@ -1,4 +1,4 @@
-class Item {
+/* class Item {
 	private id: number
 	private name: string
 	private quantity: number = 0
@@ -280,4 +280,4 @@ function createItems() {
     console.log(ItemObjects)
 }
 
-createItems()
+createItems() */
