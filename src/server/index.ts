@@ -1,69 +1,47 @@
-import { Items, ItemObjects } from "../shared/index"
-import { Item } from "./Item"
+// import { Items } from "../shared/index"
+import { Item, Items, IItemList } from "./Item"
 
-let Inventory: []
+let PlayerInventories = []
+let HorseInventories = []
+let Containers = []
 
 class Container {
-	private id: number;
-    private type: string;
-	private character: object;
-	private items: Item[];
-    private attributes: {};
+    private id: number;
+    private items: IItemList;
+    [extra: string] : {};
 
-    constructor(id: number, character: object, items: Item[]) {
+    constructor(id: number, items: IItemList) {
         this.id = id;
-        this.character = character;
         this.items = items;
     }
 
-	depositItem(item: Item, quantity: number) {
-		for(var index in this.items) {
-            if ( this.items[index].getId() === item.getId() ) {
-                this.items[index].addQuantity(quantity)
-                return;
-            }
+    depositItem(id: number, quantity: number) {
+        if ( id === this.items[id].getId() ) { 
+            this.items[id].addQuantity(quantity)
+        } else {
+            // Anti-Cheat
         }
-        item.setQuantity(quantity);
-		this.items.push(item)
-	}
+    }
 
-	withdrawItem(itemID: number, quantity: number) {
-        for(var index in this.items) {
-            if ( this.items[index].getId() === itemID ) {
-                this.items[index].removeQuantity(quantity)
-
-                if ( this.items[index].getQuantity() <= 0 ) {
-                    this.items.splice(parseInt(index), 1)
-                }
+    withdrawItem(id: number, quantity: number) {
+        if ( id === this.items[id].getId() ) { 
+            if ( this.items[id].getQuantity() >= quantity ) {
+                this.items[id].removeQuantity(quantity)
             }
-        }
-	}
-
-    findItem(itemID: number) {
-        for(var index in this.items) {
-           if ( this.items[index].getId() === itemID) {
-               return this.items[index]
-           } 
+        } else {
+            // Anti-Cheat
         }
     }
 }
 
-onNet("core:createInventory", () => {
-	Inventory[source] = new Container(1, {}, [])
-})
-
-onNet("inventory:addItem", (item: Item, quantity) => {
-    Inventory[source].depositItem(item, quantity)
-})
-
-onNet("inventory:removeItem", (id, quantity) => {
-    Inventory[source].withdrawItem(id, quantity)
-})
-
-onNet("inventory:setQuantity", (id, quantity) => {
-    if ( quantity > 0 ) {
-        Inventory[source].findItem(id).addQuantity(quantity)
-    } else {
-        Inventory[source].findItem(id).removeQuantity(quantity)
+on("inventory:createInventory", (type: string, data: {"id": any, "items": any}) => {
+    switch(type) {
+        case "Player":
+            PlayerInventories[source] = new Container(data.id, data.items)
+        case "Horse":
+            HorseInventories[source] = new Container(data.id, data.items)
+        case "Container":
+            Containers[source] = new Container(data.id, data.items)
     }
 })
+
