@@ -289,7 +289,7 @@ function populateItems() {
     })
 }
 
-on("onResourceStart", (resource) => {
+on("onResourceStart", (resource: string) => {
     if ( resource === GetCurrentResourceName()) {
         populateItems()
     }
